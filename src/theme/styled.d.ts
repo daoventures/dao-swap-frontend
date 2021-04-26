@@ -37,6 +37,9 @@ export interface Colors {
   secondary2: Color
   secondary3: Color
 
+  desc: Color
+  border: Color
+
   // other
   red1: Color
   red2: Color

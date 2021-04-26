@@ -50,11 +50,11 @@ export const initialState: CrosschainState = {
   targetTokens: new Array<CrosschainToken>(),
   currentChain: {
     name: '',
-    chainID: '',
+    chainId: -1,
   },
   targetChain: {
     name: '',
-    chainID: '',
+    chainId: -1,
   },
   currentToken: {
     name: '',
@@ -149,7 +149,7 @@ export default createReducer<CrosschainState>(initialState, builder =>
     })
     .addCase(setTransferAmount, (state, { payload: { amount } }) => {
       const currentState = { ...initialState, ...state };
-      console.log(`For cross chain, transfer amount will be ${amount}`);
+      // console.log(`For cross chain, transfer amount will be ${amount}`);
       return {
         ...currentState,
         transferAmount: amount

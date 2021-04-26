@@ -19,12 +19,14 @@ const ModalContainer = styled.div`
   h5 {
     font-weight: bold;
     margin-bottom: 1rem;
+    font-size: 14px;
   }
   p {
     font-size: 0.85rem;
     margin-top: 1rem;
     line-height: 20px;
-    color: #ced0d9;
+    // color: #ced0d9;
+    color: ${({ theme }) => theme.desc};
     a {
       font-weight: bold;
       color: ${({ theme }) => theme.primary1};
@@ -103,7 +105,7 @@ export default function CrossChainModal({
           </li>
           {supportedChains.map((chain: CrosschainChain) => (
             <li
-              key={chain.chainID}
+              key={chain.chainId}
               onClick={() => {
                 if (isTransfer) {
                   selectTransferChain(chain)

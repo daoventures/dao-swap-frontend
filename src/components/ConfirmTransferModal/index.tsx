@@ -38,7 +38,7 @@ const ModalContainer = styled.div`
     display: block;
     text-align: center;
     margin-top: 1rem;
-    font-size: 1.25rem;
+    font-size: 1.4rem;
   }
 `
 
@@ -65,7 +65,7 @@ export default function ConfirmTransferModal({
         setTitle('Approval Pending')
         break
       case ChainTransferState.ApprovalComplete:
-        setTitle('Approved! Now Start Transfer')
+        setTitle('Approved!')
         break
       case ChainTransferState.TransferPending:
         setTitle('Transfer Pending')
@@ -101,7 +101,7 @@ export default function ConfirmTransferModal({
         {tokenTransferState === ChainTransferState.ApprovalPending && <ApprovalPending />}
 
         {tokenTransferState === ChainTransferState.ApprovalComplete && (
-          <ApprovalComplete changeTransferState={changeTransferState} />
+          <ApprovalComplete changeTransferState={changeTransferState} onDismiss={onDismiss} />
         )}
 
         {tokenTransferState === ChainTransferState.TransferPending && (

@@ -1,7 +1,7 @@
 import { AVAX, BNB, ChainId, Currency, CurrencyAmount, ETHER, Token, currencyEquals } from '@zeroexchange/sdk'
 import { FadedSpan, MenuItem } from './styleds'
 import { LinkStyledButton, TYPE } from '../../theme'
-import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
+import React, { CSSProperties, MutableRefObject, useCallback, useMemo, useEffect, useState } from 'react'
 import { WrappedTokenInfo, useSelectedTokenList } from '../../state/lists/hooks'
 import { useAddUserToken, useRemoveUserAddedToken } from '../../state/user/hooks'
 
@@ -123,7 +123,14 @@ function CurrencyRow({
   const removeToken = useRemoveUserAddedToken()
   const addToken = useAddUserToken()
 
-  const hasABalance = balance && parseFloat(balance.toSignificant(6)) > 0.0000001 ? true : false
+  const [hasBalance, setHasBalance] = useState<boolean>(false)
+
+  useEffect(() => {
+    console.log(`currency=${currency?.symbol} chainId=${chainId} balance=${balance ? balance.toSignificant() : undefined}`);
+    const has = balance && parseFloat(balance.toSignificant(6)) > 0.0000001 ? true : false;
+    setHasBalance(has);
+  }, [balance])
+
   // only show add or remove buttons if not on selected list
 
   return (
@@ -171,7 +178,7 @@ function CurrencyRow({
       </Column>
       <TokenTags currency={currency} />
       <RowFixed style={{ justifySelf: 'flex-end' }}>
-        {balance && hasABalance ? <Balance balance={balance} /> : account && !balance ? <Loader /> : null}
+        {balance && hasBalance ? <Balance balance={balance} /> : account && !balance ? <Loader /> : null}
       </RowFixed>
     </MenuItem>
   )

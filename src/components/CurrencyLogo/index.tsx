@@ -17,6 +17,7 @@ import ZETHLogo from '../../assets/images/crosschain/zETH.png'
 import ZUSDCLogo from '../../assets/images/crosschain/zUSDC.png'
 import ZUSDTLogo from '../../assets/images/crosschain/zUSDT.png'
 import ZeroLogo from '../../assets/images/logo-zero-124.png'
+import DVGLogo from '../../assets/images/crosschain/DVG.png'
 import { crosschainConfig } from 'constants/CrosschainConfig'
 import styled from 'styled-components'
 import useHttpLocations from '../../hooks/useHttpLocations'
@@ -29,7 +30,7 @@ const StyledEthereumLogo = styled.img<{ size: string }>`
   width: ${({ size }) => size};
   height: ${({ size }) => size};
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
-  border-radius: 24px;
+  border-radius: 8px;
 `
 
 const StyledLogo = styled(Logo)<{ size: string }>`
@@ -142,6 +143,10 @@ export default function CurrencyLogo({
 
   if (currency && currency.symbol === 'ZERO') {
     return <StyledEthereumLogo src={ZeroLogo} size={size} style={style} />
+  }
+
+  if (currency?.symbol === 'DVG') {
+    return <StyledEthereumLogo src={DVGLogo} size={size} style={style} />
   }
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />

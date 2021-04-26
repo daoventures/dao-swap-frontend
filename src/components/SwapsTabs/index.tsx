@@ -16,19 +16,21 @@ const Tab = styled.div<{ active?: boolean }>`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  color: #fff;
+  // color: #fff;
   height: 36px;
   line-height: 36px;
-  font-size: .9rem;
+  // font-size: .9rem;
+  font-size: 25px
   font-weight: bold;
   padding: .5rem .25rem;
   margin: 1rem;
   border-radius: 12px;
-  background: ${({ active, theme }) => (active ? theme.primary1 : 'transparent')};
+  // background: ${({ active, theme }) => (active ? theme.primary1 : 'transparent')};
+  background: none:
   transition: all .2s ease-in-out;
   &:hover {
-    cursor: pointer;
-    background: ${({ active, theme }) => (active ? theme.primary1 : 'rgba(38, 98, 255, .25)')};
+    // cursor: pointer;
+    // background: ${({ active, theme }) => (active ? theme.primary1 : 'rgba(238, 238, 238, .25)')};
   }
 `
 const SwapsTabs = ({
@@ -40,13 +42,13 @@ const SwapsTabs = ({
 }) => {
   return (
     <TabsContainer>
-      <Tab active={isCrossChain ? false : true} onClick={() => onSetIsCrossChain(false)}>
+      {/* <Tab active={isCrossChain ? false : true} onClick={() => onSetIsCrossChain(false)}>
         Swaps
         <RefreshCcw size="14" style={{ marginLeft: '4px' }} />
-      </Tab>
-      <Tab active={isCrossChain ? true : false} onClick={() => onSetIsCrossChain(true)}>
-        Cross-Chain Transfer
-        <ChevronsRight size="14" style={{ marginLeft: '4px' }} />
+      </Tab> */}
+      <Tab active={isCrossChain ? true : false} /*onClick={() => onSetIsCrossChain(true)}*/>
+        Cross-Chain
+        {/* <ChevronsRight size="14" style={{ marginLeft: '4px' }} /> */}
       </Tab>
       {/*<Tab active={isCrossChain ? true : false} style={{ opacity: '.5', pointerEvents: 'none' }}>
         Transfer (Maintenance)

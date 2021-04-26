@@ -41,7 +41,7 @@ export function colors(darkMode: boolean): Colors {
     black,
 
     // text
-    text1: darkMode ? '#FFFFFF' : '#000000',
+    text1: darkMode ? '#FFFFFF' : '#222222',
     text2: darkMode ? '#C3C5CB' : '#565A69',
     text3: darkMode ? '#6C7284' : '#888D9B',
     text4: darkMode ? '#565A69' : '#C3C5CB',
@@ -49,29 +49,32 @@ export function colors(darkMode: boolean): Colors {
 
     // backgrounds / greys
     bg1: darkMode ? '#212429' : '#FFFFFF',
-    bg2: darkMode ? '#2C2F36' : '#F7F8FA',
+    bg2: darkMode ? '#2C2F36' : '#FCFCFC',
     bg3: darkMode ? '#40444F' : '#EDEEF2',
     bg4: darkMode ? '#565A69' : '#CED0D9',
     bg5: darkMode ? '#6C7284' : '#888D9B',
 
     //specialty colors
-    modalBG: darkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.3)',
+    modalBG: darkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.8)',
     advancedBG: darkMode ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.6)',
 
     //primary colors
-    primary1: darkMode ? '#2662FF' : '#ff007a',
+    primary1: darkMode ? '#2662FF' : '#18A0FB',
     primary2: darkMode ? '#3680E7' : '#FF8CC3',
-    primary3: darkMode ? '#4D8FEA' : '#FF99C9',
-    primary4: darkMode ? '#376bad70' : '#F6DDE8',
-    primary5: darkMode ? '#153d6f70' : '#FDEAF1',
+    primary3: darkMode ? '#4D8FEA' : '#18A0FB',
+    primary4: darkMode ? '#376bad70' : 'rgba(24, 160, 251, 0.3)',
+    primary5: darkMode ? '#153d6f70' : 'rgba(24, 160, 251, 0.1)',
 
     // color text
-    primaryText1: darkMode ? '#6da8ff' : '#ff007a',
+    primaryText1: darkMode ? '#6da8ff' : '#18A0FB',
 
     // secondary colors
-    secondary1: darkMode ? '#2172E5' : '#ff007a',
-    secondary2: darkMode ? '#17000b26' : '#F6DDE8',
-    secondary3: darkMode ? '#17000b26' : '#FDEAF1',
+    secondary1: darkMode ? '#2172E5' : '#18A0FB',
+    secondary2: darkMode ? '#17000b26' : 'rgba(24, 160, 251, 0.3)',
+    secondary3: darkMode ? '#17000b26' : 'rgba(24, 160, 251, 0.1)',
+
+    desc: '#666666',
+    border: darkMode ? '#2C2F36' : '#EEEEEE',
 
     // other
     red1: '#FF6871',
@@ -205,7 +208,7 @@ button {
 }
 
 html {
-  font-size: 16px;
+  font-size: 14px;
   font-variant: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -223,6 +226,6 @@ html {
 
 body {
   min-height: 100vh;
-  background: #0E1130;
+  // background: #FFFFFF;
 }
 `

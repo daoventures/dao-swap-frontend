@@ -1,16 +1,20 @@
 import { AutoColumn } from '../Column'
 import { ButtonOutlined } from '../Button'
 import { CheckCircle } from 'react-feather'
-import React from 'react'
+import React, { useContext } from 'react'
 import { RowFixed } from '../Row'
 import { Text } from 'rebass'
-import styled from 'styled-components'
+import styled, { ThemeContext } from 'styled-components'
+import TransferredImg from '../../assets/images/transferred.svg';
 
 const Message = styled.p`
   font-size: 0.85rem;
-  margin-top: 1rem;
-  line-height: 20px;
-  color: #ced0d9;
+  margin-top: 0.4rem;
+  line-height: 22px;
+  color: ${({ theme }) => theme.desc};
+  border: 1px dashed rgba(238, 238, 238, 1);
+  border-radius: 12px;
+  padding: 8px;
   a {
     font-weight: bold;
     color: ${({ theme }) => theme.primary1};
@@ -19,6 +23,27 @@ const Message = styled.p`
     text-decoration: none;
     margin-left: 4px;
     margin-right: 4px;
+  }
+`
+
+export const CloseButton = styled(ButtonOutlined)`
+  border: none
+  background-color: ${({ theme }) => theme.primary5};
+  color: ${({ theme }) => theme.primary1};
+  font-size: 15px;
+
+  &:focus {
+    box-shadow: none;
+  }
+  &:hover {
+    box-shadow: none;
+  }
+  &:active {
+    box-shadow: none;
+  }
+  &:disabled {
+    opacity: 50%;
+    cursor: auto;
   }
 `
 
@@ -35,30 +60,31 @@ export default function TransferComplete({
   transferAmount?: string
   currentToken?: any
 }) {
+  const theme = useContext(ThemeContext)
+
   return (
     <AutoColumn gap="12px" justify={'center'}>
       <RowFixed style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-        <CheckCircle size={'66'} style={{ margin: '.5rem', color: '#27AE60' }} />
-        <CheckCircle size={'66'} style={{ margin: '.5rem', color: '#27AE60' }} />
+        <img src={TransferredImg} style={{ height: '93px', margin: '.5rem' }}/>
       </RowFixed>
       <RowFixed style={{ width: '100%', marginTop: '1rem' }}>
-        <Text fontSize={17} textAlign="center" style={{ lineHeight: '20px' }}>
+        <Text fontSize={14} textAlign="center" style={{ lineHeight: '22px', color: theme.desc }}>
           <b>
             {transferAmount} {currentToken?.symbol}{' '}
           </b>
           tokens were successfully transferred into the ChainBridge, and are now being sent from {activeChain} to{' '}
           {transferTo}.
-        </Text>
-      </RowFixed>
-      <RowFixed style={{ width: '100%' }}>
-        <Text fontSize={17} textAlign="center" style={{ lineHeight: '20px' }}>
-          Santa's reindeer are busy relaying the transaction across the chains, this process can sometimes take up to 15
+          <br/>
+          Santa's reindeer are busy relaying the transaction across the chains, this process can sometimes take up to 10
           minutes.
         </Text>
       </RowFixed>
+      <RowFixed style={{ width: '100%' }}>
+        <CloseButton onClick={onDismiss} style={{}}>Close</CloseButton>
+      </RowFixed>
       <RowFixed>
         <Message>
-          To see your token assets on the correct chain, you must
+          To see your token assets on the correct chain, you must 
           <a
             href="https://metamask.zendesk.com/hc/en-us/articles/360043227612-How-to-add-a-custom-Network-RPC-and-or-Block-Explorer"
             rel="noopener noreferrer"
@@ -68,9 +94,6 @@ export default function TransferComplete({
           </a>
           of your connected wallet.
         </Message>
-      </RowFixed>
-      <RowFixed style={{ width: '100%' }}>
-        <ButtonOutlined onClick={onDismiss}>Close</ButtonOutlined>
       </RowFixed>
     </AutoColumn>
   )

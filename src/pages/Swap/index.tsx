@@ -63,19 +63,24 @@ import { useCurrency } from '../../hooks/Tokens'
 import { useDispatch } from 'react-redux'
 import useENSAddress from '../../hooks/useENSAddress'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
+import ArrowDownImg from '../../assets/images/arrow-down.png'
 
 const CrossChainLabels = styled.div`
   p {
     display: flex;
     text-align: left;
     font-weight: normal;
-    color: rgba(255, 255, 255, 0.5);
+    // color: rgba(255, 255, 255, 0.5);
+    color: ${({ theme }) => theme.desc};
+    border: 1px dashed rgba(238, 238, 238, 1);
+    border-radius: 12px;
+    padding: 16px;
     margin-top: 0.5rem;
     margin-bottom: 0;
     font-size: 0.9rem;
     span {
       margin-left: auto;
-      font-weight: bold;
+      font-weight: 600;
     }
   }
 `
@@ -374,7 +379,7 @@ export default function Swap() {
   )
 
   // swaps or cross chain
-  const [isCrossChain, setIsCrossChain] = useState<boolean>(false)
+  const [isCrossChain, setIsCrossChain] = useState<boolean>(true)
   const handleSetIsCrossChain = (bool: boolean) => {
     setIsCrossChain(bool)
 
@@ -387,12 +392,25 @@ export default function Swap() {
 
   const [transferTo, setTransferTo] = useState<string>('')
   useEffect(() => {
+    if (!currentChain || !chainId || chainId !== currentChain.chainId) {
+      // currentChain is not updated yet.
+      return;
+    }
+
     // change logic when we add polka
     if (chainId) {
       if (ETH_RPCS.indexOf(CHAIN_LABELS[chainId] || 'Ethereum') !== -1) {
-        setTransferTo('Avalanche')
+        if (currentChain.isTestnet) {
+          setTransferTo('Smart Chain(Testnet)')
+        } else {
+          setTransferTo('Smart Chain')
+        }
       } else {
-        setTransferTo('Ethereum')
+        if (currentChain.isTestnet) {
+          setTransferTo('Ropsten')
+        } else {
+          setTransferTo('Ethereum')
+        }
       }
     }
   }, [chainId, currentChain])
@@ -435,22 +453,29 @@ export default function Swap() {
   }
 
   const [confirmTransferModalOpen, setConfirmTransferModalOpen] = useState(false)
+  const [xTransferStatus, setXTransferStatus] = useState(ChainTransferState.NotStarted)
+
   const hideConfirmTransferModal = () => {
-    startNewSwap()
-    setConfirmTransferModalOpen(false)
+    startNewSwap();
   }
-  const showConfirmTransferModal = () => {
-    GetAllowance()
+  const showConfirmTransferModal = async() => {
+    await GetAllowance()
     setConfirmTransferModalOpen(true)
   }
 
+  useEffect(() => {
+    const showModal = (crosschainTransferStatus !== ChainTransferState.NotStarted);
+    if (showModal) {
+      setXTransferStatus(crosschainTransferStatus);
+    }
+    setConfirmTransferModalOpen(showModal);
+  }, [crosschainTransferStatus])
+
   // token transfer state
   const onChangeTransferState = (state: ChainTransferState) => {
-    dispatch(
-      setCrosschainTransferStatus({
-        status: state
-      })
-    )
+    dispatch(setCrosschainTransferStatus({
+      status: state
+    }))
     if (state === ChainTransferState.NotStarted && currentTxID.length) {
       BreakCrosschainSwap()
     }
@@ -503,7 +528,7 @@ export default function Swap() {
               transferTo={transferTo}
               activeChain={chainId ? CHAIN_LABELS[chainId] : 'Ethereum'}
               changeTransferState={onChangeTransferState}
-              tokenTransferState={crosschainTransferStatus}
+              tokenTransferState={xTransferStatus}
               value={formattedAmounts[Field.INPUT]}
               currency={currencies[Field.INPUT]}
               trade={trade}
@@ -524,15 +549,15 @@ export default function Swap() {
               chainId={chainId}
             />
 
-            <SwapsTabs isCrossChain={isCrossChain} onSetIsCrossChain={handleSetIsCrossChain} />
+            
             <div
               style={{
                 opacity: !isCrossChain || crosschainTransferStatus === ChainTransferState.NotStarted ? '1' : '.5',
-                pointerEvents:
-                  !isCrossChain || crosschainTransferStatus === ChainTransferState.NotStarted ? 'auto' : 'none',
+                pointerEvents: !isCrossChain || crosschainTransferStatus === ChainTransferState.NotStarted ? 'auto' : 'none',
                 filter: !isCrossChain || crosschainTransferStatus === ChainTransferState.NotStarted ? '' : 'blur(3px)'
               }}
             >
+              <SwapsTabs isCrossChain={isCrossChain} onSetIsCrossChain={handleSetIsCrossChain} />
               <BlockchainSelector
                 onSetTransferTo={setTransferTo}
                 isCrossChain={isCrossChain}
@@ -560,7 +585,8 @@ export default function Swap() {
                 <AutoColumn justify="space-between">
                   <AutoRow justify={isExpertMode ? 'space-between' : 'center'} style={{ padding: '0 1rem' }}>
                     <ArrowWrapper clickable>
-                      <ArrowDown
+                      <img src={ArrowDownImg} style={{ margin: 'auto 8px', width: '12px' }}/>
+                      {/* <ArrowDown
                         size="24"
                         onClick={() => {
                           if (!isCrossChain) {
@@ -569,7 +595,7 @@ export default function Swap() {
                           }
                         }}
                         color={currencies[Field.INPUT] && currencies[Field.OUTPUT] ? theme.primary1 : theme.text2}
-                      />
+                      /> */}
                     </ArrowWrapper>
                     {recipient === null && !showWrap && isExpertMode ? (
                       <LinkStyledButton id="add-recipient-button" onClick={() => onChangeRecipient('')}>
@@ -736,7 +762,7 @@ export default function Swap() {
                     disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError}
                     error={isValid && priceImpactSeverity > 2 && !swapCallbackError}
                   >
-                    <Text fontSize={20} fontWeight={500}>
+                    <Text fontSize={16} fontWeight={500}>
                       {swapInputError
                         ? swapInputError
                         : priceImpactSeverity > 3 && !isExpertMode
@@ -770,14 +796,14 @@ export default function Swap() {
           }}
         />
       )}
-      {crosschainTransferStatus !== ChainTransferState.NotStarted ? (
+      {/* {crosschainTransferStatus !== ChainTransferState.NotStarted ? (
         <ChainBridgePending onClick={handleChainBridgeButtonClick}>
           <p>{`Cross-chain transfer pending`}</p>
           <CustomLightSpinner src={Circle} alt="loader" size={'20px'} style={{ marginLeft: '10px' }} />
         </ChainBridgePending>
       ) : (
         ''
-      )}
+      )} */}
 
       {!isCrossChain && <AdvancedSwapDetailsDropdown trade={trade} chainId={chainId} />}
     </>

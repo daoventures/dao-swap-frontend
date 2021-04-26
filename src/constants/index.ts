@@ -304,13 +304,14 @@ export const BLOCKED_ADDRESSES: string[] = [
 
 export const CHAIN_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: 'Ethereum',
-  [ChainId.RINKEBY]: 'Rinkeby',
-  [ChainId.FUJI]: 'Avalanche',
-  [ChainId.AVALANCHE]: 'Avalanche',
+  // [ChainId.RINKEBY]: 'Rinkeby',
+  [ChainId.ROPSTEN]: 'Ropsten',
+  // [ChainId.FUJI]: 'Avalanche',
+  // [ChainId.AVALANCHE]: 'Avalanche',
   [ChainId.SMART_CHAIN]: 'Smart Chain',
-  [ChainId.SMART_CHAIN_TEST]: 'Smart Chain'
+  [ChainId.SMART_CHAIN_TEST]: 'Smart Chain(Testnet)'
 }
 
-export const SUPPORTED_CHAINS = ['Ethereum', 'Avalanche', 'Smart Chain', 'Polkadot']
+export const SUPPORTED_CHAINS = ['Ethereum'/*, 'Avalanche'*/, 'Smart Chain'/*, 'Polkadot'*/]
 
-export const ETH_RPCS = ['Ethereum', 'Rinkeby']
+export const ETH_RPCS = ['Ethereum'/*, 'Rinkeby'*/, 'Ropsten']

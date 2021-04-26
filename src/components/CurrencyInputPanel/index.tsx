@@ -43,7 +43,7 @@ const CurrencySelect = styled.button<{ selected: boolean }>`
   font-weight: 500;
   background-color: ${({ selected, theme }) => (selected ? theme.bg1 : theme.primary1)};
   color: ${({ selected, theme }) => (selected ? theme.text1 : theme.white)};
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: ${({ selected }) => (selected ? 'none' : '0px 6px 10px rgba(0, 0, 0, 0.075)')};
   outline: none;
   cursor: pointer;
@@ -89,7 +89,7 @@ const StyledDropDown = styled(DropDown)<{ selected: boolean }>`
 const InputPanel = styled.div<{ hideInput?: boolean }>`
   ${({ theme }) => theme.flexColumnNoWrap}
   position: relative;
-  border-radius: ${({ hideInput }) => (hideInput ? '8px' : '20px')};
+  border-radius: ${({ hideInput }) => (hideInput ? '8px' : '12px')};
   background-color: ${({ theme }) => theme.bg2};
   z-index: 1;
 `
@@ -138,8 +138,8 @@ const CopyRow = styled.div`
 `
 
 const Container = styled.div<{ hideInput: boolean }>`
-  border-radius: ${({ hideInput }) => (hideInput ? '8px' : '20px')};
-  border: 1px solid ${({ theme }) => theme.bg2};
+  border-radius: ${({ hideInput }) => (hideInput ? '8px' : '12px')};
+  border: 1px solid ${({ theme }) => theme.border};
   background-color: ${({ theme }) => theme.bg1};
 `
 
@@ -222,11 +222,18 @@ export default function CurrencyInputPanel({
 }: CurrencyInputPanelProps) {
 
   const { t } = useTranslation()
+  const isCrossTargetToken = () => {
+    return (isCrossChain && label === 'To');
+  }
 
   const [modalOpen, setModalOpen] = useState(false)
   const [modal2Open, setModal2Open] = useState(false)
   const { account, chainId } = useActiveWeb3React()
-  const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined, chainId)
+  const selectedCurrencyBalance = useCurrencyBalance(
+    account ?? undefined,
+    currency ?? undefined,
+    (isCrossTargetToken() && currentTargetToken?.chainId) ? currentTargetToken?.chainId : chainId
+  );
   const theme = useContext(ThemeContext)
 
   const handleDismissSearch = useCallback(() => {
@@ -303,7 +310,7 @@ export default function CurrencyInputPanel({
               </>
             )}
             <CurrencySelect
-              style={{ opacity: `${isCrossChain && label === 'To' && !altCurrency?.symbol ? '0' : '1'}` }}
+              style={{ opacity: `${isCrossTargetToken() && !altCurrency?.symbol ? '0' : '1'}` }}
               selected={!!altCurrency}
               className="open-currency-select-button"
               onClick={() => {
@@ -324,7 +331,7 @@ export default function CurrencyInputPanel({
                   </StyledTokenName>
                 ) : (
                   <StyledTokenName className="token-symbol-container" active={Boolean(altCurrency && altCurrency.symbol)}>
-                    {isCrossChain && label === 'To'
+                    {isCrossTargetToken()
                       ? `${currentTargetToken?.symbol ? currentTargetToken?.symbol : '-'}`
                       : (altCurrency && altCurrency.symbol && altCurrency.symbol.length > 20
                           ? altCurrency.symbol.slice(0, 4) +
@@ -362,7 +369,7 @@ export default function CurrencyInputPanel({
       </InputPanel>
       {altCurrency && altCurrency?.address && (
         <CopyRow>
-          <CopyToClipboard text={altCurrency?.address}>
+          <CopyToClipboard text={(isCrossTargetToken() && currentTargetToken?.address) ? currentTargetToken?.address : altCurrency?.address}>
             <p>
               <span className="active">address</span>
               <Copy className="active" size={'14'} />

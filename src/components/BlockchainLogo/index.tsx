@@ -8,8 +8,8 @@ import styled from 'styled-components'
 const StyledEthereumLogo = styled.img<{ size: string }>`
   width: ${({ size }) => size};
   height: ${({ size }) => size};
-  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
-  border-radius: 24px;
+  // box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
+  // border-radius: 24px;
   margin-left: 5px;
   margin-right: 5px;
 `
@@ -35,7 +35,8 @@ export default function BlockchainLogo({
     return <StyledEthereumLogo src={PolkadotLogo} size={size} style={style} />
   }
 
-  if (blockchain === 'Smart Chain' || blockchain === 'BNB') {
+  if (blockchain === 'Smart Chain' || blockchain === 'Smart Chain(Testnet)' || blockchain === 'BNB'
+    || blockchain === 'SmartChain' || blockchain === 'SmartChainTestnet') {
     return <StyledEthereumLogo src={BSCLogo} alt="BNB" size={size} style={style} />
   }
 

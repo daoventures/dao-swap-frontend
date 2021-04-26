@@ -21,16 +21,12 @@ export function isAddress(value: any): string | false {
   return false
 }
 
-const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
+const ETHERSCAN_PREFIXES: { } = {
   1: '',
   3: 'ropsten.',
   4: 'rinkeby.',
   5: 'goerli.',
   42: 'kovan.',
-  43113: 'FUJI',
-  43114: 'AVALANCHE',
-  97: 'SMART_CHAIN_TEST',
-  56: 'SMART_CHAIN'
 }
 
 export function getEtherscanLink(
@@ -38,19 +34,19 @@ export function getEtherscanLink(
   data: string,
   type: 'transaction' | 'token' | 'address' | 'block'
 ): string {
-  let prefix = `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`
+  let prefix;
   if (chainId === ChainId.FUJI) {
     prefix = `https://cchain.explorer.avax-test.network`
-  }
-  if (chainId === ChainId.AVALANCHE) {
+  } else if (chainId === ChainId.AVALANCHE) {
     prefix = `https://cchain.explorer.avax.network`
-  }
-  if (chainId === ChainId.SMART_CHAIN_TEST) {
+  } else if (chainId === ChainId.SMART_CHAIN_TEST) {
     prefix = `https://testnet.bscscan.com`
-  }
-  if (chainId === ChainId.SMART_CHAIN) {
+  } else if (chainId === ChainId.SMART_CHAIN) {
     prefix = `https://bscscan.com`
+  } else {
+    prefix = `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`
   }
+
   switch (type) {
     case 'transaction': {
       return `${prefix}/tx/${data}`

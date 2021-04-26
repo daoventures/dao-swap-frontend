@@ -1,18 +1,6 @@
-# Zero.Exchange App
+# DAO Swap
 
-[![Lint](https://github.com/zeroexchange/app/workflows/Lint/badge.svg)](https://github.com/zeroexchange/app/actions?query=workflow%3ALint)
-[![Tests](https://github.com/zeroexchange/app/workflows/Tests/badge.svg)](https://github.com/zeroexchange/app/actions?query=workflow%3ATests)
-[![Styled With Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io/)
-
-An open source interface for Zero Exchange -- a fork of uniswap providing cross chain liquidity from Ethereum to Avalanche.
-
-- Website: [zero.exchange](https://zero.exchange/)
-- App: [app.zero.exchange](https://app.zero.exchange)
-- Blog: [blog.zero.exchange/](https://blog.zero.exchange/)
-- Twitter: [@OfficialZeroDEX](https://twitter.com/OfficialZeroDEX)
-- Email: [hello@zero.exchange](mailto:hello@zero.exchange)
-- Discord: [Zero Exchange](https://discord.com/invite/5xwKdqrtDu)
-- Learn More: [Learn More](https://zero.exchange/learn-more)
+An open source interface for DAO Swap --a fork of ZeroExchange providing cross-chain swapping for DVG token
 
 ## Development
 

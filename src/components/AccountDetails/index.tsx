@@ -392,7 +392,7 @@ export default function AccountDetails({
           </YourAccount>
         </AccountSection>
       </UpperSection>
-      {!!pendingTransactions.length || !!confirmedTransactions.length ? (
+      {/* {!!pendingTransactions.length || !!confirmedTransactions.length ? (
         <LowerSection>
           <AutoRow mb={'1rem'} style={{ justifyContent: 'space-between' }}>
             <TYPE.body>Recent Transactions</TYPE.body>
@@ -405,7 +405,7 @@ export default function AccountDetails({
         <LowerSection>
           <TYPE.body color={theme.text1}>Your transactions will appear here...</TYPE.body>
         </LowerSection>
-      )}
+      )} */}
     </>
   )
 }

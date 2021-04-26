@@ -13,6 +13,7 @@ import { Trade } from '@zeroexchange/sdk'
 import { TruncatedText } from './styleds'
 import styled from 'styled-components'
 import { useCrosschainHooks } from '../../state/crosschain/hooks'
+import ArrowRightImg from '../../assets/images/arrow-right.png'
 
 interface NotStartedProps {
   activeChain?: string
@@ -30,7 +31,8 @@ const ChainContainer = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
-  border: 1px dashed ${({ theme }) => theme.primary1};
+  // border: 1px dashed ${({ theme }) => theme.primary1};
+  border: 1px dashed rgba(238, 238, 238, 1);
   border-radius: 12px;
 `
 
@@ -49,7 +51,8 @@ const ChainItem = styled.div`
 `
 const ChainMessage = styled.p`
   font-size: 0.85rem;
-  line-height: 1.25rem;
+  line-height: 22px;
+  color: ${({ theme }) => theme.desc};
   a {
     font-weight: bold;
     color: ${({ theme }) => theme.primary1};
@@ -93,13 +96,14 @@ export default function NotStarted({
           </Text>
         </RowFixed>
       </RowBetween>
-      <RowFixed gap={'0px'} style={{ margin: '1.5rem auto' }}>
+      <RowFixed gap={'0px'} style={{ margin: '1.5rem auto', width: '100%' }}>
         <ChainContainer>
           <ChainItem>
             <BlockchainLogo size="28px" blockchain={activeChain} />
             <span>{activeChain}</span>
           </ChainItem>
-          <ChevronsRight />
+          {/* <ChevronsRight /> */}
+          <img src={ArrowRightImg} style={{ margin: 'auto 8px', height: '12px' }}/>
           <ChainItem>
             <BlockchainLogo size="28px" blockchain={transferTo} />
             <span>{transferTo}</span>

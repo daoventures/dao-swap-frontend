@@ -18,12 +18,12 @@ export interface CrosschainToken {
 
 export interface CrosschainChain {
   name: string
-  chainID: string
+  chainId: number
   symbol?: string
   imageUri?: string
-  resourceId?: string
   isNativeWrappedToken?: boolean
   assetBase?: string
+  isTestnet?: boolean
 }
 
 export enum ChainTransferState {

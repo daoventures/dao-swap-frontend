@@ -7,7 +7,7 @@ import { ChainId } from '@zeroexchange/sdk'
 import ClaimModal from '../claim/ClaimModal'
 // import EthereumLogo from '../../assets/images/ethereum-logo.png'
 import Logo from '../../assets/svg/logo.svg'
-import LogoDark from '../../assets/images/logo-zero-512.png'
+import LogoDark from '../../assets/images/DAOventures-logo.png'
 import Menu from '../Menu'
 import { NavLink } from 'react-router-dom'
 import React from 'react'
@@ -21,6 +21,8 @@ import { useActiveWeb3React } from '../../hooks'
 import { useDarkModeManager } from '../../state/user/hooks'
 import { useETHBalances } from '../../state/wallet/hooks'
 import { useTranslation } from 'react-i18next'
+import BlockchainLogo from '../BlockchainLogo'
+import WalletLogo from '../../assets/images/wallet.png'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -32,7 +34,7 @@ const HeaderFrame = styled.div`
   width: 100%;
   top: 0;
   position: relative;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding: 1rem;
   z-index: 2;
   ${({ theme }) => theme.mediaWidth.upToMedium`
@@ -124,11 +126,15 @@ const AccountElement = styled.div<{ active: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: ${({ theme, active }) => (!active ? theme.bg1 : theme.bg3)};
-  border-radius: 12px;
+  // background-color: ${({ theme, active }) => (!active ? theme.bg1 : theme.bg3)};
+  // border-radius: 12px;
   white-space: nowrap;
   width: 100%;
   cursor: pointer;
+
+  border-left: 1px solid #EEEEEE;
+  margin-left: 8px;
+  padding-left: 8px;
 
   :focus {
     border: 1px solid blue;
@@ -136,14 +142,12 @@ const AccountElement = styled.div<{ active: boolean }>`
 `
 
 const HideSmall = styled.span`
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    display: none;
-  `};
+  display: flex;
 `
 
-const NetworkCard = styled(YellowCard)`
-  border-radius: 12px;
-  padding: 8px 12px;
+const NetworkCard = styled.div`
+  // border-radius: 12px;
+  padding: 8px 6px 8px 0;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin: 0;
     margin-right: 0.5rem;
@@ -158,6 +162,8 @@ const BalanceText = styled(Text)`
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
     display: none;
   `};
+  padding: 8px 6px 8px 0 !important;
+  font-weight: 400 !important
 `
 
 const Title = styled.a`
@@ -207,9 +213,9 @@ const Title = styled.a`
 
 const UniIcon = styled.div`
   transition: transform 0.3s ease;
-  :hover {
-    transform: rotate(-5deg);
-  }
+  // :hover {
+  //   transform: rotate(-5deg);
+  // }
 `
 
 const activeClassName = 'ACTIVE'
@@ -245,15 +251,27 @@ const StyledNavLink = styled(NavLink).attrs({
 `};
 `
 
+const ChainNameGroup = styled.div`
+  display: flex;
+  border-radius: 8px;
+  border: 1px solid #EEEEEE;
+`
+
+const BalanceLogo = styled.img<{ size: string }>`
+  width: ${({ size }) => size};
+  height: ${({ size }) => size};
+`
+
 const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
+  [ChainId.MAINNET]: 'Ethereum',
   [ChainId.RINKEBY]: 'Rinkeby',
   [ChainId.ROPSTEN]: 'Ropsten',
   [ChainId.GÖRLI]: 'Görli',
   [ChainId.KOVAN]: 'Kovan',
-  [ChainId.FUJI]: 'Avalanche',
-  [ChainId.AVALANCHE]: 'Avalanche',
+  // [ChainId.FUJI]: 'Avalanche',
+  // [ChainId.AVALANCHE]: 'Avalanche',
   [ChainId.SMART_CHAIN]: 'SmartChain',
-  [ChainId.MAINNET]: 'Ethereum'
+  [ChainId.SMART_CHAIN_TEST]: 'SmartChainTestnet',  
 }
 
 const NETWORK_SYMBOLS: any = {
@@ -263,7 +281,8 @@ const NETWORK_SYMBOLS: any = {
   Görli: 'ETH',
   Kovan: 'ETH',
   Avalanche: 'AVAX',
-  SmartChain: 'BNB'
+  SmartChain: 'BNB',
+  SmartChainTestnet: 'BNB',
 }
 
 export default function Header() {
@@ -286,10 +305,10 @@ export default function Header() {
       <HeaderRow>
         <Title href=".">
           <UniIcon>
-            <img width={'64px'} src={isDark ? LogoDark : Logo} alt="logo" />
+            <img /*width={'64px'} src={isDark ? LogoDark : Logo}*/ src={LogoDark} alt="logo" />
           </UniIcon>
         </Title>
-        <HeaderLinks>
+        {/* <HeaderLinks>
           <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
             <RefreshCw size={16} style={{ marginRight: '4px', marginTop: '2px' }} />
             {t('Swap')}
@@ -310,7 +329,7 @@ export default function Header() {
             <Book size={16} style={{ marginRight: '4px', marginTop: '2px', marginBottom: '-2px' }} />
             Guides
           </HeaderExternalLink>
-        </HeaderLinks>
+        </HeaderLinks> */}
       </HeaderRow>
       {/*<CurrentChain>
         <p>Current Blockchain: </p>
@@ -324,24 +343,32 @@ export default function Header() {
 
       <HeaderControls>
         <HeaderElement>
-          <HideSmall>
-            {chainId && NETWORK_LABELS[chainId] && (
-              <NetworkCard title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}</NetworkCard>
-            )}
-          </HideSmall>
-          <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
-            {account && userEthBalance ? (
-              <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
-                {userEthBalance?.toSignificant(4)} {symbol}
-              </BalanceText>
-            ) : null}
-            <Web3Status />
-          </AccountElement>
+          <ChainNameGroup>
+            {chainId && NETWORK_LABELS[chainId] &&
+              <HideSmall>
+                <BlockchainLogo
+                  size="24px"
+                  blockchain={NETWORK_LABELS[chainId]}
+                  style={{ margin: 'auto 5px' }}
+                />
+                <NetworkCard title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}</NetworkCard>
+              </HideSmall>
+            }
+            {account && userEthBalance &&
+              <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
+                <BalanceLogo size="18px" src={WalletLogo} style={{ margin: 'auto 8px' }}/>
+                <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
+                  {userEthBalance?.toSignificant(4)} {symbol}
+                </BalanceText>
+              </AccountElement>
+            }
+          </ChainNameGroup>
+          <Web3Status />
         </HeaderElement>
-        <HeaderElementWrap>
+        {/* <HeaderElementWrap>
           <Settings />
           <Menu />
-        </HeaderElementWrap>
+        </HeaderElementWrap> */}
       </HeaderControls>
     </HeaderFrame>
   )

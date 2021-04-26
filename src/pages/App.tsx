@@ -83,8 +83,8 @@ export default function App() {
     <Suspense fallback={null}>
       <Route component={DarkModeQueryParamReader} />
       <AppWrapper>
-        <div className="snow-bg snow"></div>
-        <Mountains />
+        {/* <div className="snow-bg snow"></div> */}
+        {/* <Mountains /> */}
         <URLWarning />
         <HeaderWrapper>
           <Header />
@@ -96,12 +96,12 @@ export default function App() {
           <Web3ReactManager>
             <Switch>
               <Route exact strict path="/swap" component={Swap} />
-              <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
+              {/* <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
               <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
-              <Route exact strict path="/find" component={PoolFinder} />
+              <Route exact strict path="/find" component={PoolFinder} /> */}
               {/*<Route exact strict path="/pool" component={Pool} />*/}
-              <Route exact strict path="/earn" component={Earn} />
+              {/* <Route exact strict path="/earn" component={Earn} />
               <Route exact strict path="/guides" component={Guides} />
               <Route exact strict path="/vote" component={Vote} />
               <Route exact strict path="/create" component={RedirectToAddLiquidity} />
@@ -117,7 +117,7 @@ export default function App() {
               <Route exact strict path="/migrate/v1" component={MigrateV1} />
               <Route exact strict path="/migrate/v1/:address" component={MigrateV1Exchange} />
               <Route exact strict path="/zero/:currencyIdA/:currencyIdB" component={Manage} />
-              <Route exact strict path="/vote/:id" component={VotePage} />
+              <Route exact strict path="/vote/:id" component={VotePage} /> */}
               <Route component={RedirectPathToSwapOnly} />
             </Switch>
           </Web3ReactManager>

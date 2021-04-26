@@ -21,7 +21,7 @@ yarn start
 To have the interface default to a different network when a wallet is not connected:
 
 1. Make a copy of `.env.production` named `.env`
-2. Change `REACT_APP_NETWORK_URL` to e.g. `"https://mainnet.infura.io/v3/{YOUR_INFURA_KEY}"`
+2. Replace the `YOUR_INFURA_KEY` with the Infura API key of yours.
 
 Note that the interface only works on testnets where both
 [Uniswap V2](https://uniswap.org/docs/v2/smart-contracts/factory/) and

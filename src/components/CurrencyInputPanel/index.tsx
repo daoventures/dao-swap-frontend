@@ -1,6 +1,6 @@
 import { Check, Copy } from 'react-feather'
-import { Currency, Pair } from '@zeroexchange/sdk'
-import React, { useCallback, useContext, useState } from 'react'
+import { Currency, CurrencyAmount, Pair } from '@zeroexchange/sdk'
+import React, { useCallback, useEffect, useContext, useState } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 
 // import BlockchainLogo from '../BlockchainLogo'
@@ -16,8 +16,9 @@ import { TYPE } from '../../theme'
 import { darken } from 'polished'
 import { returnBalanceNum } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
+import { useCurrencyBalance, useTokenBalanceOnChain } from '../../state/wallet/hooks'
 import { useTranslation } from 'react-i18next'
+import { WithDecimals } from '../../state/crosschain/hooks';
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -193,7 +194,6 @@ interface CurrencyInputPanelProps {
   showCommonBases?: boolean
   customBalanceText?: string
   isCrossChain?: boolean
-  crossChainBalance?: string
   currentTargetToken?: any
 }
 
@@ -217,30 +217,46 @@ export default function CurrencyInputPanel({
   showCommonBases,
   customBalanceText,
   isCrossChain,
-  crossChainBalance,
   currentTargetToken
 }: CurrencyInputPanelProps) {
 
   const { t } = useTranslation()
+  const theme = useContext(ThemeContext)
+
   const isCrossTargetToken = () => {
     return (isCrossChain && label === 'To');
   }
 
   const [modalOpen, setModalOpen] = useState(false)
   const [modal2Open, setModal2Open] = useState(false)
-  const { account, chainId } = useActiveWeb3React()
+
+  const { account, chainId } = useActiveWeb3React();
+
   const selectedCurrencyBalance = useCurrencyBalance(
     account ?? undefined,
     currency ?? undefined,
-    (isCrossTargetToken() && currentTargetToken?.chainId) ? currentTargetToken?.chainId : chainId
+    chainId
   );
-  const theme = useContext(ThemeContext)
+  const targetCurrencyBalance = useTokenBalanceOnChain(
+    account ?? undefined,
+    isCrossTargetToken() ? currentTargetToken?.address : '',
+    isCrossTargetToken() ? currentTargetToken?.chainId : undefined
+  )
 
   const handleDismissSearch = useCallback(() => {
     setModalOpen(false)
   }, [setModalOpen])
 
-  const hasABalance = !!(selectedCurrencyBalance && parseFloat(selectedCurrencyBalance.toSignificant(6)) > 1 / 10e18)
+  const [balance, setBalance] = useState('')
+  useEffect(() => {
+    if (isCrossTargetToken()) {
+      setBalance(targetCurrencyBalance ? WithDecimals(targetCurrencyBalance) : '');
+    } else {
+      setBalance(selectedCurrencyBalance
+        ? selectedCurrencyBalance?.toSignificant(returnBalanceNum(selectedCurrencyBalance, 6), {groupSeparator: ','})
+        : '');
+    }
+  }, [selectedCurrencyBalance, targetCurrencyBalance]);
 
   // hack to fix AWAX
   let altCurrency = currency;
@@ -277,17 +293,14 @@ export default function CurrencyInputPanel({
                 </BlockchainSelect>
                 {account && (
                   <TYPE.body
-                    onClick={hasABalance ? onMax : () => {}}
+                    onClick={balance ? onMax : () => {}}
                     color={theme.text2}
                     fontWeight={500}
                     fontSize={14}
                     style={{ display: 'inline', cursor: 'pointer' }}
                   >
-                    {!hideBalance && !!altCurrency && selectedCurrencyBalance && hasABalance
-                      ? (customBalanceText ?? 'Balance: ') +
-                        `${selectedCurrencyBalance?.toSignificant(returnBalanceNum(selectedCurrencyBalance, 6), {
-                          groupSeparator: ','
-                        })}`
+                    {!hideBalance && !!altCurrency && balance
+                      ? (customBalanceText ?? 'Balance: ') + balance
                       : '-'}
                   </TYPE.body>
                 )}
@@ -304,7 +317,7 @@ export default function CurrencyInputPanel({
                     onUserInput(val)
                   }}
                 />
-                {account && altCurrency && showMaxButton && hasABalance && label !== 'To' && (
+                {account && altCurrency && showMaxButton && label !== 'To' && (
                   <StyledBalanceMax onClick={onMax}>MAX</StyledBalanceMax>
                 )}
               </>

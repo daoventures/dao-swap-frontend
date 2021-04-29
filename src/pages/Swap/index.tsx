@@ -615,7 +615,7 @@ export default function Swap() {
                   otherCurrency={currencies[Field.INPUT]}
                   isCrossChain={isCrossChain}
                   disableCurrencySelect={isCrossChain}
-                  hideBalance={isCrossChain}
+                  // hideBalance={isCrossChain}
                   currentTargetToken={currentTargetToken}
                   id="swap-currency-output"
                 />

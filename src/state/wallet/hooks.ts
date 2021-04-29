@@ -1,5 +1,8 @@
 import { AVAX, BNB, ChainId, Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount } from '@zeroexchange/sdk'
 import { useMultipleContractSingleData, useSingleContractMultipleData } from '../multicall/hooks'
+import { ethers } from 'ethers'
+import { JsonRpcProvider } from '@ethersproject/providers'
+import { useEffect, useState } from 'react'
 
 import ERC20_INTERFACE from '../../constants/abis/erc20'
 import { UNI } from './../../constants/index'
@@ -10,7 +13,7 @@ import { useMemo } from 'react'
 import { useMulticallContract } from '../../hooks/useContract'
 import { useTotalUniEarned } from '../stake/hooks'
 import { useUserUnclaimedAmount } from '../claim/hooks'
-
+import { GetChainbridgeConfigByID } from '../../state/crosschain/hooks';
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.
  */
@@ -98,6 +101,36 @@ export function useTokenBalance(account?: string, token?: Token): TokenAmount | 
   const tokenBalances = useTokenBalances(account, [token])
   if (!token) return undefined
   return tokenBalances[token.address]
+}
+
+// get the balance for a single token/account combo
+export function useTokenBalanceOnChain(account?: string, tokenAddress?: string, chainId?: ChainId | undefined): string {
+  const [balance, setBalance] = useState('');
+
+  const getBalances = async() => {
+    if (!account || !tokenAddress || !chainId) {
+      return;
+    }
+  
+    const config = GetChainbridgeConfigByID(chainId || -1);
+    if (!config.rpcUrl.length) {
+      return;
+    }
+    const provider = new JsonRpcProvider(config.rpcUrl);
+    const contract = new ethers.Contract(tokenAddress || '', ERC20_INTERFACE, provider);
+    try {
+      const res = (await contract.balanceOf(account)).toString();
+      setBalance(res);
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    getBalances();
+  }, [account, tokenAddress, chainId]);
+
+  return balance;
 }
 
 export function useCurrencyBalances(

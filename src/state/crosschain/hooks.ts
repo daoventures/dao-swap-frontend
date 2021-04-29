@@ -55,7 +55,7 @@ function getCrosschainState(): AppState['crosschain'] {
   return store.getState().crosschain || initialState
 }
 
-function WithDecimals(value: string | number): string {
+export function WithDecimals(value: string | number): string {
   if (typeof value !== 'string') {
     value = String(value)
   }
@@ -86,7 +86,7 @@ function GetCurrentChain(currentChainName: string): CrosschainChain {
   return result
 }
 
-function GetChainbridgeConfigByID(chainId: number | string): BridgeConfig {
+export function GetChainbridgeConfigByID(chainId: number | string): BridgeConfig {
   if (typeof chainId === 'string') {
     chainId = Number(chainId)
   }

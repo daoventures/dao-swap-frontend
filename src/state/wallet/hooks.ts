@@ -13,7 +13,9 @@ import { useMemo } from 'react'
 import { useMulticallContract } from '../../hooks/useContract'
 import { useTotalUniEarned } from '../stake/hooks'
 import { useUserUnclaimedAmount } from '../claim/hooks'
+import { useBlockNumber } from '../application/hooks'
 import { GetChainbridgeConfigByID } from '../../state/crosschain/hooks';
+
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.
  */
@@ -106,6 +108,7 @@ export function useTokenBalance(account?: string, token?: Token): TokenAmount | 
 // get the balance for a single token/account combo
 export function useTokenBalanceOnChain(account?: string, tokenAddress?: string, chainId?: ChainId | undefined): string {
   const [balance, setBalance] = useState('');
+  const latestBlockNumber = useBlockNumber();
 
   const getBalances = async() => {
     if (!account || !tokenAddress || !chainId) {
@@ -128,7 +131,7 @@ export function useTokenBalanceOnChain(account?: string, tokenAddress?: string, 
 
   useEffect(() => {
     getBalances();
-  }, [account, tokenAddress, chainId]);
+  }, [account, tokenAddress, chainId, latestBlockNumber]);
 
   return balance;
 }

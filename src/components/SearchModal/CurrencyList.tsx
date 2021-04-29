@@ -126,7 +126,7 @@ function CurrencyRow({
   const [hasBalance, setHasBalance] = useState<boolean>(false)
 
   useEffect(() => {
-    // console.log(`currency=${currency?.symbol} chainId=${chainId} balance=${balance ? balance.toSignificant() : undefined}`);
+    console.log(`currency=${currency?.symbol} chainId=${chainId} balance=${balance ? balance.toSignificant() : undefined}`);
     const has = balance && parseFloat(balance.toSignificant(6)) > 0.0000001 ? true : false;
     setHasBalance(has);
   }, [balance])
